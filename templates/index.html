@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Municipios de Colombia</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='estilos.css') }}">
+</head>
+<body>
+    <h1>Sistema de consulta de municipios de Colombia</h1>
+    <p>Datos abiertos DIVIPOLA - DANE</p>
+    <form action="{{ url_for('sincronizar') }}" method="POST">
+        <button type="submit">Consultar API y guardar datos</button>
+    </form>
+    {% for mensaje in get_flashed_messages() %}
+        <p>{{ mensaje }}</p>
+    {% endfor %}
+    <h2>Registros almacenados</h2>
+    <p>Total almacenado: {{ total if total is not none else 'No disponible' }} | Registros mostrados: {{ registros|length }}</p>
+    <form action="{{ url_for('inicio') }}" method="GET">
+        <input name="q" value="{{ filtro }}" placeholder="Municipio o departamento">
+        <button>Buscar</button>
+        <a href="{{ url_for('inicio') }}">Limpiar</a>
+    </form>
+    <div class="tabla">
+    <table>
+        <thead><tr><th>Código municipio</th><th>Código departamento</th><th>Departamento</th><th>Municipio</th><th>Tipo</th><th>Longitud</th><th>Latitud</th></tr></thead>
+        <tbody>
+        {% for fila in registros %}
+        <tr><td>{{ fila.id_api }}</td><td>{{ fila.codigo_departamento or '' }}</td><td>{{ fila.departamento or '' }}</td><td>{{ fila.municipio or '' }}</td><td>{{ fila.tipo or '' }}</td><td>{{ fila.longitud or '' }}</td><td>{{ fila.latitud or '' }}</td></tr>
+        {% else %}
+        <tr><td colspan="7">No hay registros para mostrar.</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    </div>
+</body>
+</html>
