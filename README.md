@@ -55,13 +55,34 @@ Copy-Item .env.example .env
 
 El usuario pulsa sincronizar, Flask consulta la API, el modelo guarda los registros nuevos y la página muestra los datos almacenados. El buscador consulta SQL Server, no la API.
 
-## Distribución de aportes
-- Integrante 1 (completar nombre): selección de datos, API y evidencia JSON.
-- Edgar Corredor: base de datos, conexión Python con SQL Server, inserción sin duplicados y consultas.
-- Sayra Alvarado: controlador Flask, vista HTML, estilos y presentación de registros.
-- Todos: integración, pruebas y documentación.
 
-La distribución corresponde a las responsabilidades asignadas; confirmar los aportes reales antes de entregar.
+## Integrantes y aportes
+
+### Moises López - Integrante 1
+
+- Selección del conjunto de datos abiertos de Colombia.
+- Consumo de la API mediante Python.
+- Obtención e identificación de los campos JSON.
+- Pruebas de funcionamiento de la API.
+
+### Edgar Corredor - Integrante 2
+
+- Creación de la base de datos y la tabla en SQL Server.
+- Conexión de Python con SQL Server mediante pyodbc.
+- Almacenamiento de los registros obtenidos de la API.
+- Validación de registros duplicados.
+- Consultas y filtros de los datos almacenados.
+
+### Sayra Alvarado - Integrante 3
+
+- Creación del controlador mediante Flask.
+- Integración del controlador con el modelo.
+- Creación de la página web con HTML y CSS.
+- Implementación del buscador y presentación de los registros.
+
+### Trabajo grupal
+
+Integración de los componentes, pruebas de funcionamiento, corrección de errores, documentación y organización del proyecto en GitHub.
 
 ## Pruebas y evidencias
 Ejecutar las pruebas siguientes y guardar las capturas en evidencias/.
