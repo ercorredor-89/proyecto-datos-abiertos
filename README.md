@@ -1,108 +1,94 @@
-# Sistema web de consulta de municipios de Colombia
 
-## Objetivo
-Consultar datos abiertos de Colombia, almacenar registros en SQL Server y mostrarlos en una página web con un buscador y un resumen de cantidades.
+# Sistema de consulta de municipios de Colombia
 
-## Datos utilizados
-Usamos DIVIPOLA- Códigos municipios, del DANE. Contiene códigos y nombres de municipios y departamentos, tipo y coordenadas.
+## Integrantes
 
-Ficha: https://www.datos.gov.co/Mapas-Nacionales/DIVIPOLA-C-digos-municipios/gdxc-w37w
+- Moises López
+- Edgar Corredor
+- Sayra Alvarado
 
-Endpoint: https://www.datos.gov.co/resource/gdxc-w37w.json?$limit=100&$order=cod_mpio%20ASC
+## Descripción del proyecto
 
-| Campo API | Columna SQL | Descripción |
-|---|---|---|
-| cod_mpio | id_api | Código único del municipio |
-| cod_dpto | codigo_departamento | Código del departamento |
-| dpto | departamento | Nombre del departamento |
-| nom_mpio | municipio | Nombre del municipio |
-| tipo_municipio | tipo | Tipo de entidad territorial |
-| longitud | longitud | Coordenada de longitud |
-| latitud | latitud | Coordenada de latitud |
+El proyecto consiste en una aplicación web que permite consultar información de los municipios de Colombia mediante una API de Datos Abiertos. Los datos obtenidos se almacenan en SQL Server y se muestran en una página web desarrollada con Flask.
 
-Los códigos se guardan como texto para conservar los ceros iniciales. También guardamos el JSON original y la fecha de captura. La columna id_api es única para evitar duplicados.
+## Tecnologías utilizadas
 
-## Requisitos
-Python 3.10 o superior, VS Code, SQL Server, SSMS, ODBC Driver 18 y conexión a Internet.
+- Python
+- Flask
+- SQL Server
+- HTML
+- CSS
+- JSON
+- Git
+- GitHub
+
+## Arquitectura MVC
+
+- Modelo: permite la conexión con SQL Server, el almacenamiento y la consulta de los registros.
+- Vista: muestra los registros almacenados mediante una página HTML.
+- Controlador: recibe las solicitudes del usuario y conecta el modelo con la vista mediante Flask.
+
+## Distribución de responsabilidades
+
+### Integrante 1 - Moises López
+
+- Consumo de la API de Datos Abiertos.
+- Obtención de los datos en formato JSON.
+- Identificación de los campos de la API.
+
+### Integrante 2 - Edgar Corredor
+
+- Creación de la base de datos DatosAbiertosDB.
+- Creación de la tabla RegistrosAPI.
+- Adaptación de las columnas.
+- Conexión de Python con SQL Server.
+- Almacenamiento y consulta de los registros.
+- Validación de registros duplicados.
+
+### Integrante 3 - Sayra Alvarado
+
+- Desarrollo de la aplicación web con Flask.
+- Conexión del controlador con el modelo.
+- Diseño de la interfaz con HTML y CSS.
+- Visualización de los registros y filtros de búsqueda.
+
+## Funcionamiento
+
+La aplicación consulta 100 registros de la API de Datos Abiertos DIVIPOLA del DANE. Los registros se guardan en SQL Server, evitando almacenar códigos de municipios duplicados.
+
+La página web permite consultar los registros almacenados, realizar búsquedas por municipio o departamento y visualizar la cantidad total de registros y los resultados de cada búsqueda.
 
 ## Instalación y ejecución
-1. Abrir la carpeta en VS Code.
-2. Conectarse a SQL Server en SSMS y ejecutar base_datos.sql completo.
-3. En PowerShell ejecutar:
 
-```powershell
-python -m venv venv
-.\venv\Scripts\python.exe -m pip install -r requirements.txt
-Copy-Item .env.example .env
-```
+1. Descargar o clonar el repositorio.
+2. Abrir el proyecto en Visual Studio Code.
+3. Crear el entorno virtual con python -m venv venv.
+4. Activar el entorno virtual.
+5. Instalar las dependencias con pip install -r requirements.txt.
+6. Ejecutar el archivo base_datos.sql en SQL Server.
+7. Crear el archivo .env utilizando .env.example como referencia.
+8. Configurar los datos de conexión a SQL Server.
+9. Ejecutar python app.py.
+10. Abrir http://127.0.0.1:5000 en el navegador.
 
-4. Editar .env con el nombre del servidor que se usa en SSMS. Si se usa autenticación SQL, cambiar DB_TRUSTED a no y completar usuario y contraseña. No publicar .env.
-5. Ejecutar:
+## Resultados de las pruebas
 
-```powershell
-.\venv\Scripts\python.exe probar_api.py
-.\venv\Scripts\python.exe probar_conexion.py
-.\venv\Scripts\python.exe app.py
-```
+- Consumo correcto de la API.
+- Conexión exitosa con SQL Server.
+- 100 registros almacenados.
+- 100 registros únicos.
+- 0 registros duplicados.
+- Búsqueda por municipio.
+- Búsqueda por departamento.
+- Validación de búsquedas sin coincidencias.
+- Visualización del resumen numérico.
 
-6. Abrir http://127.0.0.1:5000 y pulsar el botón de sincronización. Buscar MEDELLÍN o ANTIOQUIA. La carga se limita a los primeros 100 registros ordenados por código, no a todo el país.
+## Evidencias
 
-## Funcionamiento y MVC
-- Servicio API: api/api_client.py recibe los datos JSON mediante requests.
-- Modelo: models/datos_model.py conecta Python con SQL Server, guarda y consulta los registros.
-- Controlador: app.py recibe las solicitudes, llama al servicio y al modelo y envía resultados a la vista.
-- Vista: templates/index.html presenta los registros, el buscador y el total. static/estilos.css contiene los estilos.
+Las capturas de las pruebas realizadas se encuentran en la carpeta evidencias del repositorio.
 
-El usuario pulsa sincronizar, Flask consulta la API, el modelo guarda los registros nuevos y la página muestra los datos almacenados. El buscador consulta SQL Server, no la API.
+[Consultar evidencias](./evidencias/)
 
+## Conclusión
 
-## Integrantes y aportes
-
-### Moises López - Integrante 1
-
-- Selección del conjunto de datos abiertos de Colombia.
-- Consumo de la API mediante Python.
-- Obtención e identificación de los campos JSON.
-- Pruebas de funcionamiento de la API.
-
-### Edgar Corredor - Integrante 2
-
-- Creación de la base de datos y la tabla en SQL Server.
-- Conexión de Python con SQL Server mediante pyodbc.
-- Almacenamiento de los registros obtenidos de la API.
-- Validación de registros duplicados.
-- Consultas y filtros de los datos almacenados.
-
-### Sayra Alvarado - Integrante 3
-
-- Creación del controlador mediante Flask.
-- Integración del controlador con el modelo.
-- Creación de la página web con HTML y CSS.
-- Implementación del buscador y presentación de los registros.
-
-### Trabajo grupal
-
-Integración de los componentes, pruebas de funcionamiento, corrección de errores, documentación y organización del proyecto en GitHub.
-
-## Pruebas y evidencias
-Ejecutar las pruebas siguientes y guardar las capturas en evidencias/.
-
-| Prueba | Resultado esperado |
-|---|---|
-| API | JSON con cinco registros |
-| Conexión | Mensaje de conexión exitosa |
-| Primera sincronización | Hasta 100 registros nuevos |
-| Segunda sincronización | Cero nuevos si la fuente no cambió |
-| Búsqueda | Coincidencias por municipio o departamento |
-| Consulta SQL | Registros guardados y sin códigos repetidos |
-
-En SSMS ejecutar:
-
-```sql
-USE DatosAbiertosDB;
-SELECT * FROM dbo.RegistrosAPI;
-SELECT COUNT(*) AS total FROM dbo.RegistrosAPI;
-SELECT id_api, COUNT(*) AS cantidad FROM dbo.RegistrosAPI GROUP BY id_api HAVING COUNT(*) > 1;
-```
-
-La última consulta debe devolver cero filas. Las pruebas reales y capturas se deben realizar en el equipo con SQL Server instalado.
+Con este proyecto se aplicaron los conocimientos adquiridos durante la asignatura, realizando la integración de una API, una base de datos SQL Server y una aplicación web con Python y Flask mediante la arquitectura MVC.
